@@ -17,3 +17,7 @@ When you click the corresponding key to the note, your score goes up if there is
 Each single note is a 4 by 4 square. Speaking in terms of height, you get 8 points if all 4 of the pixels are in the zone. 4 points if 3 are in the zone, 2 points if 2, and 1 point if 1. This discourages the player from simply holding down all 4 keys to get full points.
 
 There are also long notes which again, speaking in terms of height, you will get 1 point per pixel when you are holding down the key. The way I diffrentiated single and long notes is by determining if there is a rest in the middle of an interval of notes as single notes are seperated by spaces. In short, determining the note type only happens at the end of each note so long notes don't switch to single notes midway through.
+
+
+if you have questions or any part you want me to explain further:
+email: alexwan.128@gmail.com
