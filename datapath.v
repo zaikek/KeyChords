@@ -14,37 +14,37 @@ module datapath
 		input draw_notes4,
 		input check_notes,
 		input playerEN,
-		input [3:0] song,
-		output reg [818:0] song_note1,
-		output reg [818:0] song_note2,
-		output reg [818:0] song_note3,
-		output reg [818:0] song_note4,
+		input [3:0] song,				//the song selected
+		output reg [818:0] song_note1,			//first key of the song
+		output reg [818:0] song_note2,			//second key of the song
+		output reg [818:0] song_note3,			//third key of the song
+		output reg [818:0] song_note4,			//forth key of the song
 		output reg [7:0] x_out,
 		output reg [7:0] y_out,
 		output reg [2:0] colour_out,
 		output reg [15:0] score,
-		output reg done,
-		output reg updating
+		output reg done,				//when the game is done
+		output reg updating				//when current state is in progress, stay in it
 	);
 			
 	
 	reg [7:0] x_coordinate;
 	reg [7:0] y_coordinate;
 	
-	reg [119:0] note1_bar;
-	reg [119:0] note2_bar;
-	reg [119:0] note3_bar;
-	reg [119:0] note4_bar;
-	reg [17:0] counter;
-	reg [7:0] offset;
+	reg [119:0] note1_bar;					//contains data regarding first column of the vga, 1 if that pixel is a note, 0 if its not
+	reg [119:0] note2_bar;					//contains data regarding second...
+	reg [119:0] note3_bar;					//contains data regarding third...
+	reg [119:0] note4_bar;					//contains data regarding forth...
+	reg [17:0] counter;					
+	reg [7:0] offset;					//where to draw the board lines
 	
-	reg [2:0] shift_counter;
-	reg [7:0] x_board_counter;
+	reg [2:0] shift_counter;				//used to set height of each note
+	reg [7:0] x_board_counter;				
 	reg [7:0] y_board_counter;
-	reg [3:0] line_counter;
+	reg [3:0] line_counter;					//used to draw the lines of the board
 	
-	reg [3:0] next_note;
-	reg [3:0] hold_note;
+	reg [3:0] next_note;					//determines if note is done (space is next)
+	reg [3:0] hold_note;					//determines if note is single or hold
 	
 	reg [7:0] temp_score1;
 	reg [7:0] temp_score2;
@@ -65,6 +65,7 @@ module datapath
 			done <= 1'b0;
 			updating <= 1'b0;
 			
+			//draw screen black
 			if(counter < 17'b1000_0000_0000_0000_0)
 			begin
 				counter <= counter + 1'b1;
@@ -80,6 +81,7 @@ module datapath
 				
 		end
 		
+		//initialize the song, and counters
 		if(initialize)
 		begin
 			score <= 8'b0;
@@ -162,21 +164,25 @@ module datapath
 			y_board_counter <= 8'b0;
 			offset <= 8'b0;
 			
+			//shift the data in the column down one as notes are moving down
 			note1_bar <= note1_bar << 1;
 			note2_bar <= note2_bar << 1;
 			note3_bar <= note3_bar << 1;
 			note4_bar <= note4_bar << 1;
 			
+			//set top of bar to next note
 			note1_bar[0] <= song_note1[818];
 			note2_bar[0] <= song_note2[818];
 			note3_bar[0] <= song_note3[818];
 			note4_bar[0] <= song_note4[818];
 			
+			//song done?
 			if(song_note1 == 819'b0 && song_note2 == 819'b0  && song_note3 == 819'b0  && song_note4 == 819'b0 )
 				done <= 1'b0;
 			else
 				done <= 1'b1;
 			
+			//counter until 4 means each note is 4 pixels in height (song shifts only once every 4 clocks)
 			if(shift_counter == 3'b100)
 			begin
 				song_note1 <= song_note1 << 1;
@@ -196,6 +202,7 @@ module datapath
 			colour_out <= 3'b111;
 			offset <= 8'b0;
 			
+			//draw all the lines of the board
 			if(x_board_counter < 8'd160 && line_counter == 4'b0000)
 			begin
 				x_coordinate <= x_board_counter;
@@ -263,6 +270,7 @@ module datapath
 			updating <= 1'b1;
 			offset <= 8'd20;
 			
+			//determines which color to draw based on data in the column register
 			if(note1_bar[y_coordinate] == 1'b1)
 				colour_out <= 3'b001;
 			else if(y_coordinate == 8'd100 || y_coordinate == 8'd105)
@@ -270,7 +278,7 @@ module datapath
 			else
 				colour_out <= 3'b000;
 			
-			
+			//means each note is 4 pixels wide
 			if(counter < 3'b100)
 			begin
 				x_coordinate <= x_coordinate + 1'b1;
@@ -278,6 +286,7 @@ module datapath
 			end
 			else
 			begin
+				//go down a y after 4 pixels wide
 				counter <= 3'b0;
 				x_coordinate <= 8'b0;
 				y_coordinate <= y_coordinate + 1'b1;
@@ -292,7 +301,7 @@ module datapath
 			
 		end
 		
-		
+		//refer to comments from draw_note1 (same thing applies)
 		if(draw_notes2)
 		begin
 			updating <= 1'b1;
@@ -327,6 +336,7 @@ module datapath
 			
 		end
 		
+		//refer to comments from draw_note1 (same thing applies)
 		if(draw_notes3)
 		begin
 			updating <= 1'b1;
@@ -361,6 +371,7 @@ module datapath
 			
 		end
 		
+		//refer to comments from draw_note1 (same thing applies)
 		if(draw_notes4)
 		begin
 			updating <= 1'b1;
@@ -398,6 +409,7 @@ module datapath
 		if(check_notes)
 		begin
 		
+			//determines to check for next note (when a note ends) for each key
 			if(note1_bar[99] == 1'b0)
 				next_note[0] <= 1'b1;
 				
@@ -410,7 +422,7 @@ module datapath
 			if(note4_bar[99] == 1'b0)
 				next_note[3] <= 1'b1;
 		
-		
+			//determines if hold or single note for note 1 (column 1)
 			if(next_note[0] == 1'b1 && note1_bar[99] == 1'b1)
 			begin
 			
@@ -423,6 +435,7 @@ module datapath
 				
 			end
 			
+			//determines if hold or single note for note 2 (column 2)
 			if(next_note[1] == 1'b1 && note2_bar[99] == 1'b1)
 			begin
 			
@@ -435,6 +448,7 @@ module datapath
 				
 			end
 			
+			//determines if hold or single note for note 3 (column 3)
 			if(next_note[2] == 1'b1 && note3_bar[99] == 1'b1)
 			begin
 			
@@ -447,6 +461,7 @@ module datapath
 				
 			end
 			
+			//determines if hold or single note for note 4 (column 4)
 			if(next_note[3] == 1'b1 && note4_bar[99] == 1'b1)
 			begin
 			
@@ -466,12 +481,15 @@ module datapath
 		if(playerEN)
 		begin
 		
+			//logic to check how many points to add when key 3 pressed
 			if(!keypress[3])
 			begin
 			
+				//any of the 4 pixels in the zone are 1
 				if(note1_bar[100] == 1'b1 || note1_bar[101] == 1'b1 || note1_bar[102] == 1'b1 || note1_bar[103] == 1'b1)
 				begin
 				
+					//hold note points
 					if(hold_note[0])
 					begin
 						note1_bar[10] <= 1'b0;
@@ -480,6 +498,7 @@ module datapath
 					else
 					begin
 						
+						//determines how many points to add depending on how much of the note is in zone
 						if(note1_bar[103] == 1'b1 && note1_bar[102] == 1'b1 && note1_bar[101] == 1'b1 && note1_bar[100] == 1'b1)
 							temp_score1 <= temp_score1 + 4'd8;
 						else if(note1_bar[100] == 1'b1 && note1_bar[101] == 1'b1 && note1_bar[102] == 1'b1)
@@ -495,7 +514,7 @@ module datapath
 						else if(note1_bar[100] == 1'b1)
 							temp_score1 <= temp_score1 + 1'b1;
 						
-						
+						//make the note disappear
 						if(note1_bar[99] == 1'b1);
 						begin
 							note1_bar[99] <= 1'b0;
@@ -511,6 +530,7 @@ module datapath
 							end
 						end
 						
+						//still making note disappear (it won't overlap with other notes because of implementation)
 						note1_bar[100] <= 1'b0;
 						note1_bar[101] <= 1'b0;
 						note1_bar[102] <= 1'b0;
@@ -530,6 +550,7 @@ module datapath
 				
 			end
 			
+			//refer to key 3 comments (same thing applies)
 			if(!keypress[2])
 			begin
 				if(note2_bar[100] == 1'b1 || note2_bar[101] == 1'b1 || note2_bar[102] == 1'b1 || note2_bar[103] == 1'b1)
@@ -590,6 +611,7 @@ module datapath
 				end
 			end
 			
+			//refer to key 3 comments (same thing applies)
 			if(!keypress[1])
 			begin
 				if(note3_bar[100] == 1'b1 || note3_bar[101] == 1'b1 || note3_bar[102] == 1'b1 || note3_bar[103] == 1'b1)
@@ -650,6 +672,7 @@ module datapath
 				end
 			end
 			
+			//refer to key 3 comments (same thing applies)
 			if(!keypress[0])
 			begin
 				if(note4_bar[100] == 1'b1 || note4_bar[101] == 1'b1 || note4_bar[102] == 1'b1 || note4_bar[103] == 1'b1)
@@ -712,6 +735,7 @@ module datapath
 		
 		end
 		
+		//update total score from score of each note
 		score <= temp_score1 + temp_score2 + temp_score3 + temp_score4;
 		x_out <= x_coordinate + offset;
 		y_out <= y_coordinate;
