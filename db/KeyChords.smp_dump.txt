@@ -1,0 +1,15 @@
+
+State Machine - |KeyChords|control:c0|current_state
+Name current_state.PLAYER_GO_WAIT current_state.PLAYER_GO current_state.CHECK_NOTES current_state.DRAW_NOTES4 current_state.DRAW_NOTES3 current_state.DRAW_NOTES2 current_state.DRAW_NOTES1 current_state.DRAW_BOARD current_state.ERASE_NOTES current_state.LOAD_NOTES current_state.INITIALIZE_SONG current_state.GAME_START 
+current_state.GAME_START 0 0 0 0 0 0 0 0 0 0 0 0 
+current_state.INITIALIZE_SONG 0 0 0 0 0 0 0 0 0 0 1 1 
+current_state.LOAD_NOTES 0 0 0 0 0 0 0 0 0 1 0 1 
+current_state.ERASE_NOTES 0 0 0 0 0 0 0 0 1 0 0 1 
+current_state.DRAW_BOARD 0 0 0 0 0 0 0 1 0 0 0 1 
+current_state.DRAW_NOTES1 0 0 0 0 0 0 1 0 0 0 0 1 
+current_state.DRAW_NOTES2 0 0 0 0 0 1 0 0 0 0 0 1 
+current_state.DRAW_NOTES3 0 0 0 0 1 0 0 0 0 0 0 1 
+current_state.DRAW_NOTES4 0 0 0 1 0 0 0 0 0 0 0 1 
+current_state.CHECK_NOTES 0 0 1 0 0 0 0 0 0 0 0 1 
+current_state.PLAYER_GO 0 1 0 0 0 0 0 0 0 0 0 1 
+current_state.PLAYER_GO_WAIT 1 0 0 0 0 0 0 0 0 0 0 1 
