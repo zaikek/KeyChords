@@ -1,0 +1,7 @@
+Info (10281): Verilog HDL Declaration information at control.v(9): object "erase_notes" differs only in case from object "ERASE_NOTES" in the same scope File: /cmshome/wanalex/Desktop/KeyChordsv4/control.v Line: 9
+Info (10281): Verilog HDL Declaration information at control.v(10): object "draw_board" differs only in case from object "DRAW_BOARD" in the same scope File: /cmshome/wanalex/Desktop/KeyChordsv4/control.v Line: 10
+Info (10281): Verilog HDL Declaration information at control.v(11): object "draw_notes1" differs only in case from object "DRAW_NOTES1" in the same scope File: /cmshome/wanalex/Desktop/KeyChordsv4/control.v Line: 11
+Info (10281): Verilog HDL Declaration information at control.v(12): object "draw_notes2" differs only in case from object "DRAW_NOTES2" in the same scope File: /cmshome/wanalex/Desktop/KeyChordsv4/control.v Line: 12
+Info (10281): Verilog HDL Declaration information at control.v(13): object "draw_notes3" differs only in case from object "DRAW_NOTES3" in the same scope File: /cmshome/wanalex/Desktop/KeyChordsv4/control.v Line: 13
+Info (10281): Verilog HDL Declaration information at control.v(14): object "draw_notes4" differs only in case from object "DRAW_NOTES4" in the same scope File: /cmshome/wanalex/Desktop/KeyChordsv4/control.v Line: 14
+Info (10281): Verilog HDL Declaration information at control.v(15): object "check_notes" differs only in case from object "CHECK_NOTES" in the same scope File: /cmshome/wanalex/Desktop/KeyChordsv4/control.v Line: 15

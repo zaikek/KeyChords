@@ -1,0 +1,14 @@
+Analysis & Synthesis Status : Successful - Thu Aug  1 18:02:06 2019
+Quartus Prime Version : 16.1.0 Build 196 10/24/2016 SJ Lite Edition
+Revision Name : KeyChords
+Top-level Entity Name : KeyChords
+Family : Cyclone IV E
+Total logic elements : 5,885
+    Total combinational functions : 5,869
+    Dedicated logic registers : 3,946
+Total registers : 3946
+Total pins : 124
+Total virtual pins : 0
+Total memory bits : 57,600
+Embedded Multiplier 9-bit elements : 0
+Total PLLs : 1
