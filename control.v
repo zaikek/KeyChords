@@ -2,7 +2,7 @@ module control
 	(
 		input resetn,
 		input clk,
-		input go,
+		input go, //when to refresh the screen essentially
 		input start,
 		input updating,
 		output reg ld_notes,
@@ -22,6 +22,7 @@ module control
 	reg [3:0] current_state;
 	reg [3:0] next_state;
 	
+	//states are pretty explanatory by name
 	localparam			GAME_START = 4'd0,
 							INITIALIZE_SONG = 4'd1,
 							LOAD_NOTES = 4'd2,
