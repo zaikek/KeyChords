@@ -1,8 +1,8 @@
 module KeyChords
 	(
 		input CLOCK_50,						//	On Board 50 MHz
-      input [3:0] KEY,
-      input [17:0] SW,
+      		input [3:0] KEY,
+      		input [17:0] SW,
 		output VGA_CLK,   						//	VGA Clock
 		output VGA_HS,							//	VGA H_SYNC
 		output VGA_VS,							//	VGA V_SYNC
@@ -38,6 +38,7 @@ module KeyChords
 	wire [159:0] note3_bar;
 	wire [159:0] note4_bar;
 	
+	//used for FSM - datapath
 	wire ld_notes;
 	wire initialize;
 	wire erase_notes;
