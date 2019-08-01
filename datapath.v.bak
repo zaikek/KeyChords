@@ -1,0 +1,306 @@
+module datapath
+	(
+		input resetn,
+		input clk,
+		input [3:0] keypress,
+		input [3:0] songselect,
+		input initialize,
+		input ld_notes,
+		input erase_notes,
+		input draw_notes1,
+		input draw_notes2,
+		input draw_notes3,
+		input draw_notes4,
+		input playerEN,
+		output reg [9:0] song_note1,
+		output reg [9:0] song_note2,
+		output reg [9:0] song_note3,
+		output reg [9:0] song_note4,
+		output reg [7:0] x_out,
+		output reg [7:0] y_out,
+		output reg [2:0] colour_out,
+		output reg [7:0] score,
+		output reg updating
+	);
+			
+	
+	reg [7:0] x_coordinate;
+	reg [7:0] y_coordinate;
+	
+	reg [119:0] note1_bar;
+	reg [119:0] note2_bar;
+	reg [119:0] note3_bar;
+	reg [119:0] note4_bar;
+	reg [17:0] counter;
+	reg [7:0] offset;
+	
+	reg [2:0] shift_counter;
+	
+	always @(posedge clk)
+	begin
+		if(!resetn)
+		begin
+			colour_out <= 3'b000;
+			offset <= 0;
+			
+			if(counter < 17'b1000_0000_0000_0000_0)
+			begin
+				counter <= counter + 1'b1;
+				x_coordinate <= counter[7:0];
+				y_coordinate <= counter[15:8];
+			end
+			else
+			begin
+				counter <= 0;
+				x_coordinate <= 8'b00000000;
+				y_coordinate <= 8'b00000000;
+			end
+				
+		end
+		
+		if(initialize)
+		begin
+			score <= 8'b00000000;
+			
+			song_note1 <= 10'b1010101010;
+			song_note2 <= 10'b0101010101;
+			song_note3 <= 10'b1100110011;
+			song_note4 <= 10'b0011001100;
+		end
+			
+		if(ld_notes)
+		begin
+			note1_bar <= note1_bar << 1;
+			note2_bar <= note2_bar << 1;
+			note3_bar <= note3_bar << 1;
+			note4_bar <= note4_bar << 1;
+			
+			note1_bar[0] <= song_note1[9];
+			note2_bar[0] <= song_note2[9];
+			note3_bar[0] <= song_note3[9];
+			note4_bar[0] <= song_note4[9];
+			
+			if(shift_counter == 3'b100)
+			begin
+				song_note1 <= song_note1 << 1;
+				song_note2 <= song_note2 << 1;
+				song_note3 <= song_note3 << 1;
+				song_note4 <= song_note4 << 1;
+				shift_counter = 3'b000;
+			end
+			else
+				shift_counter <= shift_counter + 1'b1;
+		
+		end
+		
+		if(erase_notes)
+		begin
+			colour_out <= 3'b000;
+			offset <= 0;
+			updating <= 1'b1;
+			
+			if(counter < 17'b1000_0000_0000_0000_0)
+			begin
+				counter <= counter + 1'b1;
+				x_coordinate <= counter[7:0];
+				y_coordinate <= counter[15:8];
+			end
+			else
+			begin
+				counter <= 18'd0;
+				x_coordinate <= 8'b00000000;
+				y_coordinate <= 8'b00000000;
+				updating <= 1'b0;
+			end
+			
+		end
+		
+		if(draw_notes1)
+		begin
+			updating <= 1'b1;
+			
+			offset <= 8'd20;
+			if(note1_bar[y_coordinate] == 1'b1)
+				colour_out <= 3'b111;
+			else
+				colour_out <= 3'b000;
+			
+			
+			if(counter < 3'b100)
+				x_coordinate <= x_coordinate + 1'b1;
+			else
+			begin
+				counter <= 0;
+				y_coordinate <= y_coordinate + 1'b1;
+				if(y_coordinate == 8'b01111000)
+				begin
+					updating <= 1'b0;
+					y_coordinate <= 0;
+					x_coordinate <= 0;
+				end
+			
+			end
+			
+		end
+		
+		if(draw_notes2)
+		begin
+			updating <= 1'b1;
+			
+			offset <= 8'd60;
+			if(note2_bar[y_coordinate] == 1'b1)
+				colour_out <= 3'b111;
+			else
+				colour_out <= 3'b000;
+			
+			
+			if(counter < 3'b100)
+				x_coordinate <= x_coordinate + 1'b1;
+			else
+			begin
+				counter <= 0;
+				y_coordinate <= y_coordinate + 1'b1;
+				if(y_coordinate == 8'b01111000)
+				begin
+					updating <= 1'b0;
+					y_coordinate <= 0;
+					x_coordinate <= 0;
+				end
+			
+			end
+			
+		end
+		
+		if(draw_notes3)
+		begin
+			updating <= 1'b1;
+			
+			offset <= 8'd100;
+			if(note3_bar[y_coordinate] == 1'b1)
+				colour_out <= 3'b111;
+			else
+				colour_out <= 3'b000;
+			
+			
+			if(counter < 3'b100)
+				x_coordinate <= x_coordinate + 1'b1;
+			else
+			begin
+				counter <= 0;
+				y_coordinate <= y_coordinate + 1'b1;
+				if(y_coordinate == 8'b01111000)
+				begin
+					updating <= 1'b0;
+					y_coordinate <= 0;
+					x_coordinate <= 0;
+				end
+			
+			end
+			
+		end
+		
+		if(draw_notes4)
+		begin
+			updating <= 1'b1;
+			
+			offset <= 8'd140;
+			if(note4_bar[y_coordinate] == 1'b1)
+				colour_out <= 3'b111;
+			else
+				colour_out <= 3'b000;
+			
+			
+			if(counter < 3'b100)
+				x_coordinate <= x_coordinate + 1'b1;
+			else
+			begin
+				counter <= 0;
+				y_coordinate <= y_coordinate + 1'b1;
+				if(y_coordinate == 8'b01111000)
+				begin
+					updating <= 1'b0;
+					y_coordinate <= 0;
+					x_coordinate <= 0;
+				end
+			
+			end
+			
+		end
+		
+		if(playerEN)
+		begin
+		
+			if(keypress[0])
+			begin
+				if(note1_bar[99] == 1'b1)
+				begin
+					score <= score + 1'b1;
+					note1_bar[96] <= 1'b0;
+					note1_bar[97] <= 1'b0;
+					note1_bar[98] <= 1'b0;
+					note1_bar[99] <= 1'b0;
+					note1_bar[100] <= 1'b0;
+					note1_bar[101] <= 1'b0;
+					note1_bar[102] <= 1'b0;
+					colour_out <= 3'b000;
+				end
+			end
+			
+			if(keypress[1])
+			begin
+				if(note2_bar[99] == 1'b1)
+				begin
+					score <= score + 1'b1;
+					note2_bar[96] <= 1'b0;
+					note2_bar[97] <= 1'b0;
+					note2_bar[98] <= 1'b0;
+					note2_bar[99] <= 1'b0;
+					note2_bar[100] <= 1'b0;
+					note2_bar[101] <= 1'b0;
+					note2_bar[102] <= 1'b0;
+					colour_out <= 3'b000;
+				end
+			end
+			
+			if(keypress[2])
+			begin
+				if(note2_bar[99] == 1'b1)
+				begin
+					score <= score + 1'b1;
+					note3_bar[96] <= 1'b0;
+					note3_bar[97] <= 1'b0;
+					note3_bar[98] <= 1'b0;
+					note3_bar[99] <= 1'b0;
+					note3_bar[100] <= 1'b0;
+					note3_bar[101] <= 1'b0;
+					note3_bar[102] <= 1'b0;
+					colour_out <= 3'b000;
+				end
+			end
+			
+			if(keypress[3])
+			begin
+				if(note3_bar[99] == 1'b1)
+				begin
+					score <= score + 1'b1;
+					note4_bar[96] <= 1'b0;
+					note4_bar[97] <= 1'b0;
+					note4_bar[98] <= 1'b0;
+					note4_bar[99] <= 1'b0;
+					note4_bar[100] <= 1'b0;
+					note4_bar[101] <= 1'b0;
+					note4_bar[102] <= 1'b0;
+					colour_out <= 3'b000;
+				end
+			end
+		
+		end
+		
+			
+		x_out <= x_coordinate + offset;
+		y_out <= y_coordinate;
+		
+	end
+	
+	
+endmodule
